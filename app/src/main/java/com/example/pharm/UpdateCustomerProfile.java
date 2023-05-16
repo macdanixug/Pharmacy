@@ -40,7 +40,6 @@ public class UpdateCustomerProfile extends AppCompatActivity {
     private Button editProfile;
     private CircleImageView myProfile;
     String imageUrl;
-    private ProgressDialog progressDialog;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -55,7 +54,6 @@ public class UpdateCustomerProfile extends AppCompatActivity {
         mAgeEditText = findViewById(R.id.age);
         mAddressEditText = findViewById(R.id.address);
         editProfile = findViewById(R.id.edit_profile);
-        progressDialog=new ProgressDialog(UpdateCustomerProfile.this);
 
         // Get the current user and database reference
         mAuth = FirebaseAuth.getInstance();
@@ -96,11 +94,6 @@ public class UpdateCustomerProfile extends AppCompatActivity {
                 // Notify the user that the profile has been updated
                 Toast.makeText(UpdateCustomerProfile.this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
 //                Navigating Back to Customer Fragment
-                progressDialog.setTitle("Updating Profile");
-                progressDialog.setProgress(100);
-                progressDialog.setMessage("Please wait....");
-                progressDialog.show();
-                progressDialog.dismiss();
                 onBackPressed();
 
             }

@@ -140,15 +140,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         notifyItemRemoved(index);
     }
 
-    // Remove item from cart by item object
-    public void removeItem(CartItem item) {
-        int index = cartItems.indexOf(item);
-        if (index >= 0) {
-            removeItem(index);
-        }
-    }
-
-
 
 
 }
