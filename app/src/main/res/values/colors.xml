@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#F2F2F2</color>
+    <color name="update"> #0099ff</color>
+    <color name="login_blue">#4F7A95</color>
+    <color name="delete">#FF0000</color>
+    <color name="red">#FF0000</color>
+</resources>
