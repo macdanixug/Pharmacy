@@ -1,7 +1,10 @@
 package com.example.pharm;
 
+import static com.example.pharm.PharmacyAddProductFragment.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -27,7 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CustomerProfileFragment extends Fragment {
 
@@ -36,7 +42,8 @@ public class CustomerProfileFragment extends Fragment {
     private FirebaseUser currentUser;
     private TextView mNameTextView, mEmailTextView, mPhoneTextView, mAgeTextView, mAddressTextView;
     private Button mUpdateButton, editProfile;
-    private ImageView myProfile;
+    private CircleImageView myProfile;
+    String imageUrl;
 
     public CustomerProfileFragment() {
         // Required empty public constructor
@@ -75,7 +82,7 @@ public class CustomerProfileFragment extends Fragment {
                 String phone = snapshot.child("phone").getValue(String.class);
                 String age = snapshot.child("age").getValue(String.class);
                 String address = snapshot.child("address").getValue(String.class);
-                String imageUrl=snapshot.child("uri").getValue(String.class);
+                imageUrl=snapshot.child("uri").getValue(String.class);
 
 
                 // Set the TextViews with the user data
@@ -93,6 +100,7 @@ public class CustomerProfileFragment extends Fragment {
             }
         });
 
+
         // Set onClickListener for the update button
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,18 +110,22 @@ public class CustomerProfileFragment extends Fragment {
                 String phone = mPhoneTextView.getText().toString();
                 String age = mAgeTextView.getText().toString();
                 String address = mAddressTextView.getText().toString();
-                String imageUrl=myProfile.toString();
 
-                // Create a new instance of the update dialog fragment with the user data
-                CustomerProfileUpdateDialog dialog = CustomerProfileUpdateDialog.newInstance(name, phone, age, address, imageUrl);
-                dialog.show(getParentFragmentManager(), "Update Profile");
+
+//                Passing User Data to an Intent
+                Intent send=new Intent(getContext(), UpdateCustomerProfile.class);
+                send.putExtra("name", name);
+                send.putExtra("phone", phone);
+                send.putExtra("age", age);
+                send.putExtra("address", address);
+                send.putExtra("uri", imageUrl);
+                startActivity(send);
             }
         });
-
 
         return view;
     }
 
-
 }
+
 
