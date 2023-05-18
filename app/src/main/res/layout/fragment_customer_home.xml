@@ -9,23 +9,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="@color/black">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:text="Welcome To Pharmacy App"
+            android:layout_height="25dp"
+            android:text="Welcome To Our Pharmacy"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:layout_marginTop="15dp"
-            android:textSize="18sp"/>
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/exit"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/exit"
+            android:layout_marginRight="-100dp"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="172dp"
+        android:layout_height="152dp"
         android:orientation="vertical">
 
         <androidx.viewpager.widget.ViewPager
@@ -44,11 +54,11 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="22dp"
             android:text="Available Drugs"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="2dp"
             android:textSize="15sp"/>
 
     </LinearLayout>

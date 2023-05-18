@@ -150,6 +150,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
 
             // Update the cart items in Shared Preferences
             updateCartItems();
+            // Calculate the total cost based on the updated cart items
+            double totalCost = calculateTotalCost();
+            totalTextView.setText("Ugx: " + totalCost);
         }
     }
 
