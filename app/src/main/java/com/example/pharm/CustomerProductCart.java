@@ -33,12 +33,22 @@ public class CustomerProductCart extends AppCompatActivity {
     private ValueEventListener eventListener;
     private ShoppingCartAdapter adapter;
     private FirebaseAuth mAuth;
+    private Button check_cart;
 
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_prouct_cart);
+
+//        Check Cart Button
+        check_cart=findViewById(R.id.check_cart);
+        check_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CustomerProductCart.this, MyCart.class));
+            }
+        });
 
         mAuth = FirebaseAuth.getInstance();
         pharmacy=findViewById(R.id.pharmacy);

@@ -2,6 +2,7 @@ package com.example.pharm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;
@@ -131,15 +133,29 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
     }
 
     // Remove item from cart
-    public void removeItem(int index) {
-        if (index < 0 || index >= cartItems.size()) {
-            return; // index out of bounds
-        }
+    private void removeItem(int position) {
+        if (position >= 0 && position < cartItems.size()) {
+            cartItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, cartItems.size()); // Update indices of remaining items
 
-        cartItems.remove(index);
-        notifyItemRemoved(index);
+            // Update the cart items in Shared Preferences
+            updateCartItemsInSharedPrefs();
+        }
     }
 
+    // Update the cart items in Shared Preferences
+    private void updateCartItemsInSharedPrefs() {
+        // Replace "CartPreferences" with your desired preference name
+        SharedPreferences sharedPreferences = context.getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        Gson gson = new Gson();
+        String jsonCartItems = gson.toJson(cartItems);
+
+        // Save the updated cart items in the preference
+        editor.putString("cart_items", jsonCartItems);
+        editor.apply();
+    }
 
 }

@@ -38,6 +38,13 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/check_cart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check Out Cart"
+        android:layout_marginStart="120dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products"
         android:layout_width="match_parent"
