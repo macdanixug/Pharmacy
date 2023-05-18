@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/login_blue">
+        android:background="@color/black">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="Pharmacy App"
+            android:layout_height="35dp"
+            android:text="Welcome To Pharmacy App"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:layout_marginTop="15dp"
@@ -23,82 +23,52 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name">
+        android:layout_height="172dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:contentDescription="@string/app_name" />
 
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/img" />
-
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/img_1" />
-
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/img" />
-
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/img_2" />
-
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/upload" />
-
-            <ImageView
-                android:layout_margin="5dp"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_weight="1"
-                android:src="@drawable/upload" />
-
-        </LinearLayout>
-
-    </HorizontalScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/login_blue">
+        android:background="@color/black">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:text="Available Drugs"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="15dp"
             android:textSize="15sp"/>
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/drugs"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/drugs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

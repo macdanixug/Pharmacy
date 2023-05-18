@@ -27,6 +27,8 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.MyViewHolder> {
@@ -68,24 +70,35 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.add_to_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Retrieve the current cart items from Shared Preferences
-                List<CartItem> cartItems = getCartItemsFromSharedPrefs();
+                    // Retrieve the current cart items from Shared Preferences
+                    List<CartItem> cartItems = getCartItemsFromSharedPrefs();
 
-                // Create a new cart item
-                CartItem cartItem = new CartItem(drug.getName(), 1, Double.parseDouble(drug.getPrice()), drug.getImageUrl());
+                    // Check if the item already exists in the cart
+                    boolean itemExists = false;
+                    for (int i = 0; i < cartItems.size(); i++) {
+                        if (drug.getName() != null && drug.getName().equals(cartItems.get(i).getName())) {
+                            // Item already exists in the cart, increment the quantity
+                            CartItem existingCartItem = cartItems.get(i);
+                            existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
+                            itemExists = true;
+                            Toast.makeText(context, drug.getName() + "quantity has been increased", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
 
-                if (cartItems == null) {
-                    cartItems = new ArrayList<>(); // Create a new list if it is null
-                }
+                    if (!itemExists) {
+                        // Item does not exist in the cart, create a new cart item
+                        CartItem cartItem = new CartItem(drug.getName(), 1, Double.parseDouble(drug.getPrice()), drug.getImageUrl());
+                        cartItems.add(cartItem);
+                        Toast.makeText(context, drug.getName() + " has been added to cart", Toast.LENGTH_SHORT).show();
+                    }
 
-                cartItems.add(cartItem);
+                    // Save the updated cart items to Shared Preferences
+                    saveCartItemsToSharedPrefs(cartItems);
+             }
 
-                // Save the updated cart items to Shared Preferences
-                saveCartItemsToSharedPrefs(cartItems);
+            });
 
-                Toast.makeText(context, drug.getName() + " has been added to cart", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -132,5 +145,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             add_to_cart = itemView.findViewById(R.id.order);
         }
     }
+
 }
 

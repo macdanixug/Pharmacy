@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pharm.CartItem;
+import com.example.pharm.MyCartAdapter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -27,7 +29,6 @@ public class MyCart extends AppCompatActivity {
         setContentView(R.layout.activity_my_cart);
 
         total = findViewById(R.id.total);
-        total.setText(null);
 
         recyclerView = findViewById(R.id.myCart);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -36,8 +37,12 @@ public class MyCart extends AppCompatActivity {
         cartItems = getCartItemsFromSharedPrefs();
 
         // Set up the CartAdapter with the cart items
-        cartAdapter = new MyCartAdapter(this, cartItems);
+        cartAdapter = new MyCartAdapter(this, cartItems, getSharedPreferences("CartPreferences", Context.MODE_PRIVATE), total);
         recyclerView.setAdapter(cartAdapter);
+
+        // Calculate the total cost
+        double totalCost = cartAdapter.calculateTotalCost();
+        total.setText("Ugx: " + totalCost);
     }
 
     // Retrieve cart items from Shared Preferences

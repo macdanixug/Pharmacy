@@ -1,7 +1,8 @@
 package com.example.pharm;
 
-import android.app.AlertDialog; // changed to use AlertDialog from app package
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CustomerHomeFragment extends Fragment {
     private DatabaseReference databaseReference;
@@ -30,6 +33,12 @@ public class CustomerHomeFragment extends Fragment {
     private ValueEventListener eventListener;
     private CustomerHomeAdapter adapter;
     private AlertDialog dialog;
+    private ViewPager viewPager;
+    private int[] images = {R.drawable.img, R.drawable.img_1, R.drawable.img_2, R.drawable.logo};
+    private int currentPage = 0;
+    private Timer timer;
+    private final long DELAY_MS = 2000;
+    private final long PERIOD_MS = 5000;
 
     public CustomerHomeFragment() {
         // Required empty public constructor
@@ -41,34 +50,52 @@ public class CustomerHomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_customer_home, container, false);
 
-        // add view.findViewById to find view in inflated layout
-        drugs=view.findViewById(R.id.drugs);
-        drugs.setHasFixedSize(true);
-        // Setting its Layout
-        drugs.setLayoutManager(new LinearLayoutManager(getContext())); // pass context instead of this
+        viewPager = view.findViewById(R.id.viewPager);
+        ImageSliderAdapter imageSliderAdapter = new ImageSliderAdapter(getContext(), images);
+        viewPager.setAdapter(imageSliderAdapter);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext()); // pass context instead of this
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                if (currentPage == images.length) {
+                    currentPage = 0;
+                }
+                viewPager.setCurrentItem(currentPage++, true);
+            }
+        };
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnable);
+            }
+        }, DELAY_MS, PERIOD_MS);
+
+        drugs = view.findViewById(R.id.drugs);
+        drugs.setHasFixedSize(true);
+        drugs.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
         builder.setTitle("Loading Data");
         builder.setMessage("Please wait......");
-        dialog = builder.create(); // assign to class level variable
+        dialog = builder.create();
         dialog.show();
 
         myDrugs = new ArrayList<>();
 
-        adapter = new CustomerHomeAdapter(getContext(), myDrugs); // pass context instead of this
+        adapter = new CustomerHomeAdapter(getContext(), myDrugs);
         drugs.setAdapter(adapter);
 
-        // Retrieving all users with role pharmacy
         databaseReference = FirebaseDatabase.getInstance().getReference("drugs");
-        eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+        eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 myDrugs.clear();
-                for (DataSnapshot itemSnapshot: snapshot.getChildren()){
-                    Drug drugs = itemSnapshot.getValue(Drug.class);
-
-                    myDrugs.add(drugs);
+                for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
+                    Drug drug = itemSnapshot.getValue(Drug.class);
+                    myDrugs.add(drug);
                 }
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
@@ -78,10 +105,22 @@ public class CustomerHomeFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 dialog.dismiss();
             }
-        });
+        };
+        databaseReference.addValueEventListener(eventListener);
 
-
-        return view; // return the inflated view
+        return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        if (databaseReference != null && eventListener != null) {
+            databaseReference.removeEventListener(eventListener);
+        }
+    }
 }

@@ -28,12 +28,10 @@ import java.util.List;
 public class CustomerProductCart extends AppCompatActivity {
     private RecyclerView myDrugs;
     private TextView pharmacy;
-    private DatabaseReference databaseReference;
     private List<Drug> drugs;
-    private ValueEventListener eventListener;
     private ShoppingCartAdapter adapter;
     private FirebaseAuth mAuth;
-    private Button check_cart;
+    private ImageView check_cart;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,7 +39,7 @@ public class CustomerProductCart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_prouct_cart);
 
-//        Check Cart Button
+//        Check Cart Icon ImageView
         check_cart=findViewById(R.id.check_cart);
         check_cart.setOnClickListener(new View.OnClickListener() {
             @Override

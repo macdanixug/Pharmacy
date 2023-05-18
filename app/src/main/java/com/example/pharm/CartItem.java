@@ -4,24 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CartItem implements Parcelable {
-    private String productName;
+    private String name;
     private int quantity;
     private double price;
     private String imageUrl;
 
-    public CartItem(String productName, int quantity, double price, String imageUrl) {
-        this.productName = productName;
+    public CartItem(String name, int quantity, double price, String imageUrl) {
+        this.name = name;
         this.quantity = quantity;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getQuantity() {
@@ -50,7 +50,7 @@ public class CartItem implements Parcelable {
 
 
     protected CartItem(Parcel in) {
-        productName = in.readString();
+        name = in.readString();
         price = in.readDouble();
         imageUrl=in.readString();
     }
@@ -74,7 +74,7 @@ public class CartItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(productName);
+        dest.writeString(name);
         dest.writeDouble(price);
         dest.writeString(imageUrl);
     }

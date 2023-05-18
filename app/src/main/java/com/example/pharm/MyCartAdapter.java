@@ -1,9 +1,7 @@
 package com.example.pharm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +13,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHolder> {
     private ArrayList<CartItem> cartItems;
     private Context context;
+    private SharedPreferences sharedPreferences;
+    TextView totalTextView;
 
-    public MyCartAdapter(Context context, List<CartItem> cartItems) {
+    public MyCartAdapter(Context context, List<CartItem> cartItems, SharedPreferences sharedPreferences, TextView totalTextView) {
         this.context = context;
-        this.cartItems= (ArrayList<CartItem>) cartItems;
+        this.cartItems = (ArrayList<CartItem>) cartItems;
+        this.sharedPreferences = sharedPreferences;
+        this.totalTextView = totalTextView;
     }
 
     @NonNull
@@ -43,17 +45,16 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
-        holder.cartItemName.setText(cartItem.getProductName());
-        holder.cartItemQuantity.setText("1");
+        holder.cartItemName.setText(cartItem.getName());
+        holder.cartItemQuantity.setText(String.valueOf(cartItem.getQuantity()));
         holder.cartItemPrice.setText("Ugx: " + String.valueOf(cartItem.getPrice()));
 
-        String imageUri=cartItem.getImageUrl();
+        String imageUri = cartItem.getImageUrl();
         if (imageUri != null) {
             Picasso.get().load(imageUri).into(holder.itemImage);
         } else {
             holder.itemImage.setImageResource(R.drawable.out); // Set a placeholder image
         }
-
 
         // Remove item button
         holder.remove_item.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +67,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             }
         });
 
-//        Reduce Quantity
+        // Reduce Quantity
+        // Reduce Quantity
         holder.reduce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +79,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
                     if (currentQuantity > 1) {
                         cartItem.setQuantity(currentQuantity - 1);
                         holder.cartItemQuantity.setText(String.valueOf(cartItem.getQuantity()));
+                        updateCartItems(); // Update the cart items in Shared Preferences
+
+                        // Calculate the total cost based on the updated cart items
+                        double totalCost = calculateTotalCost();
+                        totalTextView.setText("Ugx: " + totalCost);
                     } else {
                         Toast.makeText(context, "Minimum quantity reached", Toast.LENGTH_SHORT).show();
                     }
@@ -84,8 +91,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             }
         });
 
-
-//        Increase Quantity
+// Increase Quantity
         holder.increase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,13 +102,17 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
                     if (currentQuantity < 10) {
                         cartItem.setQuantity(currentQuantity + 1);
                         holder.cartItemQuantity.setText(String.valueOf(cartItem.getQuantity()));
+                        updateCartItems(); // Update the cart items in Shared Preferences
+
+                        // Calculate the total cost based on the updated cart items
+                        double totalCost = calculateTotalCost();
+                        totalTextView.setText("Ugx: " + totalCost);
                     } else {
                         Toast.makeText(context, "Maximum quantity reached", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
-
 
     }
 
@@ -126,9 +136,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             cartItemPrice = view.findViewById(R.id.cart_item_price);
             itemImage = view.findViewById(R.id.cart_item_image);
             remove_item = view.findViewById(R.id.remove_item);
-            reduce=view.findViewById(R.id.reduce);
-            increase=view.findViewById(R.id.increase);
-
+            reduce = view.findViewById(R.id.reduce);
+            increase = view.findViewById(R.id.increase);
         }
     }
 
@@ -140,22 +149,27 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             notifyItemRangeChanged(position, cartItems.size()); // Update indices of remaining items
 
             // Update the cart items in Shared Preferences
-            updateCartItemsInSharedPrefs();
+            updateCartItems();
         }
     }
 
     // Update the cart items in Shared Preferences
-    private void updateCartItemsInSharedPrefs() {
-        // Replace "CartPreferences" with your desired preference name
-        SharedPreferences sharedPreferences = context.getSharedPreferences("CartPreferences", Context.MODE_PRIVATE);
+    private void updateCartItems() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-
         Gson gson = new Gson();
         String jsonCartItems = gson.toJson(cartItems);
-
-        // Save the updated cart items in the preference
         editor.putString("cart_items", jsonCartItems);
         editor.apply();
     }
 
+    // Calculate the total cost of all items in the cart
+    public double calculateTotalCost() {
+        double totalCost = 0;
+
+        for (CartItem cartItem : cartItems) {
+            totalCost += cartItem.getQuantity() * cartItem.getPrice();
+        }
+
+        return totalCost;
+    }
 }
