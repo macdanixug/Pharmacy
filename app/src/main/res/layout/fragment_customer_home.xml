@@ -13,72 +13,79 @@
         android:background="@color/black">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
             android:text="Welcome To Our Pharmacy"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:textSize="15sp"/>
 
         <ImageView
             android:id="@+id/exit"
-            android:layout_width="match_parent"
+            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_weight="1"
             android:layout_marginTop="2dp"
             android:src="@drawable/exit"
-            android:layout_marginRight="-100dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="152dp"
-        android:orientation="vertical">
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/black">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="22dp"
-            android:text="Available Drugs"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:layout_marginTop="2dp"
-            android:textSize="15sp"/>
+            android:layout_marginEnd="8dp"/>
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/drugs"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:contentDescription="@string/app_name" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/black">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:text="Available Drugs"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="8dp"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/drugs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>

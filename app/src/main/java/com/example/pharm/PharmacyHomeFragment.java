@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,8 +52,8 @@ public class PharmacyHomeFragment extends Fragment {
         mAuth=FirebaseAuth.getInstance();
         myDrugs=view.findViewById(R.id.drugs);
         myDrugs.setHasFixedSize(true);
-        // Setting its Layout
-        myDrugs.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Setting its Layout to Grid Layout with 2 Columns
+        myDrugs.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);

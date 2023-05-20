@@ -13,7 +13,7 @@
         android:background="@color/login_blue">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="450dp"
             android:layout_height="wrap_content"
             android:text="@string/Uploaded"
             android:textColor="@color/white"
@@ -25,11 +25,11 @@
         <ImageView
             android:id="@+id/out"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:layout_marginTop="7dp"
-            android:layout_marginLeft="115dp"
-            android:src="@drawable/out"/>
+            android:layout_marginLeft="50dp"
+            android:src="@drawable/exit"/>
 
     </LinearLayout>
 
@@ -37,6 +37,7 @@
         android:id="@+id/drugs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="52dp"/>
+        android:layout_marginTop="52dp"
+        android:padding="5dp"/>
 
 </FrameLayout>
