@@ -25,7 +25,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class MyCart extends AppCompatActivity {
     private ArrayList<CartItem> cartItems = new ArrayList<>();
@@ -131,17 +134,36 @@ public class MyCart extends AppCompatActivity {
         if (user != null) {
             String userId = user.getUid();
             DatabaseReference orderRef = cartItemsRef.push();
-            DatabaseReference userCartRef = orderRef.child(userId);
+
+            // Set user_id and timestamp for the order
+            orderRef.child("user_id").setValue(userId);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            String timestamp = sdf.format(new Date());
+            orderRef.child("timestamp").setValue(timestamp);
+
+            double totalAmount = 0.0;
+            DatabaseReference productsRef = orderRef.child("products");
+
             for (CartItem item : cartItems) {
-                DatabaseReference cartItemRef = userCartRef.push();
-                cartItemRef.setValue(item);
+                DatabaseReference productRef = productsRef.push();
+
+                productRef.child("name").setValue(item.getName());
+                productRef.child("price").setValue(item.getPrice());
+                productRef.child("quantity").setValue(item.getQuantity());
+
+                totalAmount += item.getPrice() * item.getQuantity();
             }
+
+            // Set the total amount for the order
+            orderRef.child("total_amount").setValue(totalAmount);
+
             clearCartItemsInSharedPrefs();
             cartItems.clear();
             cartAdapter.notifyDataSetChanged();
             total.setText("Ugx: 0");
         }
     }
+
 
     private void clearCartItemsInSharedPrefs() {
         // Replace "CartPreferences" with your desired preference name
