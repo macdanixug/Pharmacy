@@ -9,6 +9,9 @@ public class CartItem implements Parcelable {
     private double price;
     private String imageUrl;
 
+    public CartItem() {
+    }
+
     public CartItem(String name, int quantity, double price, String imageUrl) {
         this.name = name;
         this.quantity = quantity;

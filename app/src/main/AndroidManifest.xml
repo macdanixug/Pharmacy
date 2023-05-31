@@ -28,7 +28,7 @@
             android:name=".PharmacyUpdateProduct"
             android:exported="false" />
         <activity
-            android:name=".Pharmacy"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".AdminEditProfile"
@@ -61,7 +61,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Pharmacy"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
