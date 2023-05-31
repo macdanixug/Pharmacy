@@ -8,13 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.List;
 
 public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.ViewHolder> {
-    private List<OrderItem> orderItems;
+    private DatabaseReference productsRef;
 
-    public viewOrderAdapter(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+    public viewOrderAdapter(DatabaseReference productsRef) {
+        this.productsRef = productsRef;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,14 +46,38 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        OrderItem orderItem = orderItems.get(position);
-        holder.productNameTextView.setText(orderItem.getProductName());
-        holder.productQuantityTextView.setText(String.valueOf(orderItem.getProductQuantity()));
-        holder.productPriceTextView.setText(String.valueOf(orderItem.getProductPrice()));
+        DatabaseReference orderProductsRef = productsRef.child("Order");
+
+        orderProductsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                StringBuilder productNameBuilder = new StringBuilder();
+                StringBuilder productQuantityBuilder = new StringBuilder();
+                StringBuilder productPriceBuilder = new StringBuilder();
+
+                for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                    String name = productSnapshot.child("name").getValue(String.class);
+                    int quantity = productSnapshot.child("quantity").getValue(Integer.class);
+                    double price = productSnapshot.child("price").getValue(Double.class);
+                }
+
+                holder.productNameTextView.setText(productNameBuilder.toString().trim());
+                holder.productQuantityTextView.setText(productQuantityBuilder.toString().trim());
+                holder.productPriceTextView.setText(productPriceBuilder.toString().trim());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     @Override
     public int getItemCount() {
-        return orderItems.size();
+
+        return 0;
     }
 }

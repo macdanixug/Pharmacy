@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class PharmacyOrdersFragment extends Fragment {
     private RecyclerView recyclerView;
     private viewOrderAdapter adapter;
     private List<OrderItem> orderItems;
+    private DatabaseReference productsRef;
 
     public PharmacyOrdersFragment() {
         // Required empty public constructor
@@ -32,7 +35,7 @@ public class PharmacyOrdersFragment extends Fragment {
         recyclerView = view.findViewById(R.id.products);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         orderItems = new ArrayList<>();
-        adapter = new viewOrderAdapter(orderItems);
+        adapter = new viewOrderAdapter(productsRef);
         recyclerView.setAdapter(adapter);
 
         return view;
