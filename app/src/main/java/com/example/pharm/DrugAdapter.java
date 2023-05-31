@@ -41,9 +41,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.MyViewHolder> 
         holder.drug_name.setText(drugs.get(position).getName());
         holder.price.setText(drugs.get(position).getPrice());
         holder.description.setText(drugs.get(position).getDescription());
-        holder.child.setText(drugs.get(position).getChild());
-        holder.old.setText(drugs.get(position).getOld());
-
         Picasso.get().load(drugs.get(position).getImageUrl()).into(holder.drug_image);
 
 //        Update Drug Button
@@ -56,8 +53,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.MyViewHolder> 
                 updateIntent.putExtra("drug", drug.getName());
                 updateIntent.putExtra("price", drug.getPrice());
                 updateIntent.putExtra("description", drug.getDescription());
-                updateIntent.putExtra("child", drug.getChild());
-                updateIntent.putExtra("old", drug.getOld());
                 updateIntent.putExtra("imageUrl", drug.getImageUrl());
                 updateIntent.putExtra("key", drug.getKey());
 
@@ -73,7 +68,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView drug_image;
-        private TextView drug_name,price,description,child,old;
+        private TextView drug_name,price,description;
         private Button edit;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -83,8 +78,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.MyViewHolder> 
             drug_name=itemView.findViewById(R.id.drug_name);
             price=itemView.findViewById(R.id.price);
             description=itemView.findViewById(R.id.description);
-            child=itemView.findViewById(R.id.child);
-            old=itemView.findViewById(R.id.old);
 
             edit=itemView.findViewById(R.id.edit_drug);
 

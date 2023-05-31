@@ -35,7 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class PharmacyAddProductFragment extends Fragment {
-    private EditText drug_name, description, child, old, price;
+    private EditText drug_name, description, price;
     private ImageView drug_image;
     private Button upload_drug;
     private Uri imageUri;
@@ -54,8 +54,6 @@ public class PharmacyAddProductFragment extends Fragment {
 
         drug_name = view.findViewById(R.id.drug_name);
         description = view.findViewById(R.id.drug_description);
-        child = view.findViewById(R.id.child);
-        old = view.findViewById(R.id.old);
         price = view.findViewById(R.id.price);
         drug_image = view.findViewById(R.id.drug_image);
         upload_drug=view.findViewById(R.id.upload);
@@ -110,12 +108,9 @@ public class PharmacyAddProductFragment extends Fragment {
             // Upload drug details to database
             String name = drug_name.getText().toString();
             String desc = description.getText().toString();
-            String childAge = child.getText().toString();
-            String oldAge = old.getText().toString();
             String drugPrice = price.getText().toString();
 
                     if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(desc)
-                            && !TextUtils.isEmpty(childAge) && !TextUtils.isEmpty(oldAge)
                             && !TextUtils.isEmpty(drugPrice) && imageUri != null) {
                         uploadDrugToFirebase(imageUri);
                     }else {
@@ -149,8 +144,6 @@ public class PharmacyAddProductFragment extends Fragment {
                         public void onSuccess(Uri uri) {
                             String name = drug_name.getText().toString();
                             String desc = description.getText().toString();
-                            String childAge = child.getText().toString();
-                            String oldAge = old.getText().toString();
                             String drugPrice = price.getText().toString();
                             String drugID=databaseReference.push().getKey();
 
@@ -163,7 +156,7 @@ public class PharmacyAddProductFragment extends Fragment {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     String pharmacyName=snapshot.child("pharmacy").getValue(String.class);
-                                    Drug drug=new Drug(drugID,pharmacyName,name,desc,childAge,oldAge,drugPrice,uri.toString());
+                                    Drug drug=new Drug(drugID,pharmacyName,name,desc,drugPrice,uri.toString());
 
                                     // Get a reference to the "users" node
                                     FirebaseDatabase.getInstance().getReference("drugs").child(drugID).setValue(drug).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -172,6 +165,11 @@ public class PharmacyAddProductFragment extends Fragment {
                                             if (task.isSuccessful()) {
                                                 progressDialog.dismiss();
                                                 Toast.makeText(getContext(), "Drug Uploaded Successfully", Toast.LENGTH_SHORT).show();
+                                                drug_name.getText().clear();
+                                                price.getText().clear();
+                                                description.getText().clear();
+                                                drug_image.setImageResource(R.drawable.upload);
+
                                             } else {
                                                 progressDialog.dismiss();
                                                 Toast.makeText(getContext(), "Drug Upload Failed", Toast.LENGTH_SHORT).show();

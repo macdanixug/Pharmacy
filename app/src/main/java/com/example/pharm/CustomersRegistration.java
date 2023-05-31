@@ -1,11 +1,11 @@
 package com.example.pharm;
 
 public class CustomersRegistration {
-    String name, email, phone, age, address, role, uri;
+    String name, email, phone, age, address, role, uri, password;
 
     public CustomersRegistration() {
     }
-    public CustomersRegistration(String name, String email, String phone, String age, String address, String role, String uri) {
+    public CustomersRegistration(String name, String email, String phone, String age, String address, String role, String uri, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -13,6 +13,7 @@ public class CustomersRegistration {
         this.address = address;
         this.role = role;
         this.uri = uri;
+        this.password = password;
     }
 
 
@@ -70,5 +71,13 @@ public class CustomersRegistration {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

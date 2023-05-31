@@ -28,7 +28,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 public class PharmacyUpdateProduct extends AppCompatActivity {
-    private EditText drug_name,description,child,old,price;
+    private EditText drug_name,description,price;
     private ImageView drug_image;
     private FirebaseAuth mAuth;
     private Uri imageUri;
@@ -44,8 +44,6 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
 
         drug_name = findViewById(R.id.drug_name);
         description = findViewById(R.id.drug_description);
-        child = findViewById(R.id.child);
-        old = findViewById(R.id.old);
         price = findViewById(R.id.price);
         drug_image = findViewById(R.id.drug_image);
         edit=findViewById(R.id.edit_myDrug);
@@ -55,8 +53,6 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
         Intent retrieve=getIntent();
         String Name=retrieve.getStringExtra("drug");
         String Description=retrieve.getStringExtra("description");
-        String Child= retrieve.getStringExtra("child");
-        String Old= retrieve.getStringExtra("old");
         String Price= retrieve.getStringExtra("price");
         String ImageURL= retrieve.getStringExtra("imageUrl");
         String key=retrieve.getStringExtra("key");
@@ -64,8 +60,6 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
 //        Loading them to text fields
         drug_name.setText(Name);
         description.setText(Description);
-        child.setText(Child);
-        old.setText(Old);
         price.setText(Price);
 
         Picasso.get().load(ImageURL).into(drug_image);
@@ -89,13 +83,11 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
                 // Get the updated values from EditText fields
                 String updatedName = drug_name.getText().toString().trim();
                 String updatedDescription = description.getText().toString().trim();
-                String updatedChild = child.getText().toString().trim();
-                String updatedOld = old.getText().toString().trim();
                 String updatedPrice = price.getText().toString().trim();
 
                 // Check if all fields are filled
-                if (updatedName.isEmpty() || updatedDescription.isEmpty() || updatedChild.isEmpty()
-                        || updatedOld.isEmpty() || updatedPrice.isEmpty() || imageUri == null) {
+                if (updatedName.isEmpty() || updatedDescription.isEmpty()
+                        || updatedPrice.isEmpty() || imageUri == null) {
                     Toast.makeText(PharmacyUpdateProduct.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Update product information in the Firebase Realtime Database
@@ -116,7 +108,7 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
                                     String drugId = productsRef.push().getKey();
 
                                     // Create a new Product object with the updated values
-                                    Drug updatedProduct = new Drug(drugId,productKey,updatedName, updatedDescription, updatedChild, updatedOld, updatedPrice, updatedImageURL);
+                                    Drug updatedProduct = new Drug(drugId,productKey,updatedName, updatedDescription, updatedPrice, updatedImageURL);
 
                                     // Update the product in the Firebase Realtime Database
                                     productsRef.child(productKey).setValue(updatedProduct).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -124,6 +116,11 @@ public class PharmacyUpdateProduct extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Toast.makeText(PharmacyUpdateProduct.this, "Product updated successfully", Toast.LENGTH_SHORT).show();
+                                                drug_name.getText().clear();
+                                                price.getText().clear();
+                                                description.getText().clear();
+                                                drug_image.setImageResource(R.drawable.upload);
+
                                                 finish(); // Finish the activity
                                             } else {
                                                 Toast.makeText(PharmacyUpdateProduct.this, "Failed to update product", Toast.LENGTH_SHORT).show();

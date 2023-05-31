@@ -22,11 +22,11 @@
 
             <ImageView
                 android:id="@+id/drug_image"
-                android:layout_width="250dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:layout_marginBottom="16dp"
+                android:scaleType="fitXY"
+                android:layout_marginBottom="3dp"
                 android:layout_marginTop="5dp"
                 android:src="@drawable/upload"/>
 
@@ -51,47 +51,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/price"
                     android:textSize="15sp"
-                    android:textStyle="bold"
+                    android:textColor="@color/red"
                     android:layout_weight="1"
                     android:textAlignment="center"/>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/drug_description"
-                android:textSize="15sp"
-                android:layout_marginTop="2dp"
-                android:textAlignment="center"/>
-
-        <LinearLayout
-            android:layout_marginTop="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/child"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/child"
-                android:textSize="15sp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:textAlignment="center"/>
-
-            <TextView
-                android:id="@+id/old"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/old"
-                android:textSize="15sp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:textAlignment="center"/>
-        </LinearLayout>
 
             <LinearLayout
                 android:layout_marginTop="2dp"

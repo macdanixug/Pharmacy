@@ -69,7 +69,6 @@ public class CustomerProductCart extends AppCompatActivity {
 
         Intent retrieve = getIntent();
         String pharmacyName = retrieve.getStringExtra("pharmacy");
-//        Setting Pharmacy Name
         pharmacy.setText(pharmacyName+" pharmacy");
         Query query = FirebaseDatabase.getInstance().getReference("drugs").orderByChild("pharmacy").equalTo(pharmacyName);
         query.addListenerForSingleValueEvent(new ValueEventListener() {

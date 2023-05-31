@@ -1,19 +1,17 @@
 package com.example.pharm;
 
 public class Drug {
-    String id,pharmacy,name,description,child,old,price,imageUrl,key;
+    String id,pharmacy,name,description,price,imageUrl,key;
 
     public Drug() {
     }
 
-    public Drug(String id,String pharmacy, String name, String description, String child, String old, String price, String imageUrl) {
+    public Drug(String id,String pharmacy, String name, String description, String price, String imageUrl) {
         this.id=id;
         this.pharmacy = pharmacy;
         this.name = name;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.child = child;
-        this.old = old;
         this.price = price;
     }
 
@@ -39,22 +37,6 @@ public class Drug {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getChild() {
-        return child;
-    }
-
-    public void setChild(String child) {
-        this.child = child;
-    }
-
-    public String getOld() {
-        return old;
-    }
-
-    public void setOld(String old) {
-        this.old = old;
     }
 
     public String getPrice() {

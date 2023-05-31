@@ -118,6 +118,31 @@ private void chooseImage() {
                 name.requestFocus();
                 return ;
 
+            }if(Email.isEmpty()){
+                name.setError("Email Required*");
+                name.requestFocus();
+                return ;
+
+            }if(Phone.isEmpty()){
+                name.setError("Phone Required*");
+                name.requestFocus();
+                return ;
+
+            }if(Age.isEmpty()){
+                name.setError("Age Required*");
+                name.requestFocus();
+                return ;
+
+            }if(Address.isEmpty()){
+                name.setError("Address Required*");
+                name.requestFocus();
+                return ;
+
+            }if(Password.isEmpty()){
+                name.setError("Password Required*");
+                name.requestFocus();
+                return ;
+
             }else {
                 mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -151,10 +176,11 @@ private void chooseImage() {
                         String Phone = phone.getText().toString().trim();
                         String Age = age.getText().toString().trim();
                         String Address = address.getText().toString().trim();
+                        String Password = password.getText().toString().trim();
                         String Role="customer";
 
                         // Create a new user object with the data
-                        CustomersRegistration user = new CustomersRegistration(Name, Email, Phone, Age, Address, Role, uri.toString());
+                        CustomersRegistration user = new CustomersRegistration(Name, Email, Phone, Age, Address, Role, uri.toString(), Password);
 
                         // Get a reference to the "users" node
                         FirebaseDatabase.getInstance().getReference("users")

@@ -57,10 +57,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Drug myDrugs=drugs.get(position);
         holder.drug_name.setText(myDrugs.getName());
-        holder.price.setText(myDrugs.getPrice());
-        holder.description.setText(myDrugs.getDescription());
-        holder.child.setText(myDrugs.getChild());
-        holder.old.setText(myDrugs.getOld());
+        holder.price.setText("UGX Shs "+myDrugs.getPrice());
 
         String imageUri=myDrugs.getImageUrl();
         Picasso.get().load(imageUri).into(holder.drug_image);
@@ -70,8 +67,13 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.add_to_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    // Retrieve the current cart items from Shared Preferences
-                    List<CartItem> cartItems = getCartItemsFromSharedPrefs();
+                // Retrieve the current cart items from Shared Preferences
+                List<CartItem> cartItems = getCartItemsFromSharedPrefs();
+
+                // Check if the cartItems list is null, and initialize it if necessary
+                if (cartItems == null) {
+                    cartItems = new ArrayList<>();
+                }
 
                     // Check if the item already exists in the cart
                     boolean itemExists = false;
@@ -129,7 +131,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView drug_image;
-        private TextView drug_name, price, description, child, old;
+        private TextView drug_name, price, description;
         private Button add_to_cart;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -139,8 +141,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             drug_name = itemView.findViewById(R.id.drug_name);
             price = itemView.findViewById(R.id.price);
             description = itemView.findViewById(R.id.description);
-            child = itemView.findViewById(R.id.child);
-            old = itemView.findViewById(R.id.old);
 
             add_to_cart = itemView.findViewById(R.id.order);
         }
