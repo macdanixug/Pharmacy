@@ -3,7 +3,9 @@ package com.example.pharm;
 import static com.example.pharm.PharmacyAddProductFragment.RESULT_OK;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -72,6 +74,30 @@ public class CustomerProfileFragment extends Fragment {
         editProfile=view.findViewById(R.id.edit_profile);
         myProfile=view.findViewById(R.id.image);
 
+        if (currentUser == null) {
+            // User is not logged in, show Yes/No dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Please Wait.......");
+            builder.setMessage("To see your Profile\nYou need to login please");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getContext(), Login.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            return view;
+        }
                 // Retrieve the user's profile data from Firebase
         mDatabase.child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
