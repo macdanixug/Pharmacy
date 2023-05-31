@@ -49,7 +49,7 @@
             android:name=".Admin"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Customer"
             android:exported="false" />
         <activity
             android:name=".Register"
@@ -61,7 +61,7 @@
             android:name=".Login"
             android:exported="false" />
         <activity
-            android:name=".Customer"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

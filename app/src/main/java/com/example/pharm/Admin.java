@@ -27,7 +27,6 @@ public class Admin extends AppCompatActivity {
     private CircleImageView profilePicture;
     private TextView admin_name;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -43,28 +42,6 @@ public class Admin extends AppCompatActivity {
         admin_name=findViewById(R.id.admin_name);
 
         mAuth=FirebaseAuth.getInstance();
-
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
-
-        // Attach a ValueEventListener to retrieve the user's data
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get the user's data and set it to the UI elements
-                String Name = dataSnapshot.child("name").getValue(String.class);
-                String photoUrl = dataSnapshot.child("uri").getValue(String.class);
-
-                admin_name.setText(Name);
-                Picasso.get().load(photoUrl).into(profilePicture);
-            }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle the error
-                }
-            });
-
 
 //        Viewing Pharmacies
         view.setOnClickListener(new View.OnClickListener() {
@@ -95,13 +72,5 @@ public class Admin extends AppCompatActivity {
             }
         });
 
-//        Profile
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Admin.this, AdminProfile.class));
-                finish();
-            }
-        });
     }
 }

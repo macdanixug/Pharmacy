@@ -45,14 +45,15 @@
                 android:id="@+id/profilePicture"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/profile" />
+                android:src="@drawable/logo" />
 
             <TextView
                 android:id="@+id/adminname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Admin"
+                android:text="Kloud App"
                 android:textColor="#FFF"
                 android:textSize="20sp"
                 android:layout_marginTop="25dp"
@@ -63,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/adminname"
-                android:text="Name"
+                android:text="Admin"
                 android:textColor="#FFF"
                 android:textSize="20sp"
                 android:layout_marginLeft="200dp"
