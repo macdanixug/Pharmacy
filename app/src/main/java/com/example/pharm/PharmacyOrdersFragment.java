@@ -20,17 +20,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
 public class PharmacyOrdersFragment extends Fragment {
     private RecyclerView recyclerView;
-    private viewOrderAdapter cartAdapter;
-    private List<CartItem> cartItems;
-    private TextView user_count_textview;
-    private AlertDialog dialog;
-    private DatabaseReference cartItemsRef;
-
+    RecyclerView.LayoutManager layoutManager;
+    ArrayList<CartItem> list;
+    viewOrderAdapter adapter;
+    final private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Orders");
 
     public PharmacyOrdersFragment() {
         // Required empty public constructor
@@ -42,23 +42,43 @@ public class PharmacyOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pharmacy_orders, container, false);
 
+        recyclerView= view.findViewById(R.id.products);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
         builder.setTitle("Loading Orders");
-        builder.setMessage("Please wait...");
-        dialog = builder.create();
+        builder.setMessage("Please wait......");
+        AlertDialog dialog = builder.create();
         dialog.show();
 
-        recyclerView = view.findViewById(R.id.products);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        cartItems = new ArrayList<>();
-        cartAdapter = new viewOrderAdapter(cartItems);
-        recyclerView.setAdapter(cartAdapter);
+        recyclerView.setHasFixedSize(true);
+        list= new ArrayList<>();
+        adapter = new viewOrderAdapter(getActivity(),list);
+        recyclerView.setAdapter(adapter);
 
-        dialog.dismiss();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                // Retrieve data from dataSnapshot and add it to your RecyclerView adapter
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CartItem object = snapshot.getValue(CartItem.class);
+                    list.add(object);
+                }
+
+                viewOrderAdapter adapter = new viewOrderAdapter(getActivity(), list);
+                recyclerView.setAdapter(adapter);
+                dialog.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle error
+            }
+        });
 
         return view;
-
-        }
-
+    }
 }
