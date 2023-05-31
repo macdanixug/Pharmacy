@@ -27,6 +27,7 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.View
             productNameTextView = itemView.findViewById(R.id.productNameTextView);
             productQuantityTextView = itemView.findViewById(R.id.productQuantityTextView);
             productPriceTextView = itemView.findViewById(R.id.productPriceTextView);
+
         }
     }
 
