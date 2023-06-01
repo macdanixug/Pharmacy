@@ -9,7 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -17,15 +20,18 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
     private Context context;
     private ArrayList<String> userIdList;
     private viewOrderAdapter.OnItemClickListener mListener;
+    private DatabaseReference usersRef;
 
     public interface OnItemClickListener {
         void onItemClick(String userId);
     }
 
-    public viewOrderAdapter(Context context, ArrayList<String> userIdList) {
+    public viewOrderAdapter(Context context, ArrayList<String> userIdList, DatabaseReference usersRef) {
         this.context = context;
         this.userIdList = userIdList;
+        this.usersRef = usersRef;
     }
+
 
     public void setOnItemClickListener(viewOrderAdapter.OnItemClickListener listener) {
         mListener = listener;
@@ -42,8 +48,24 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
     @Override
     public void onBindViewHolder(@NonNull viewOrderAdapter.myViewHolder holder, int position) {
         String userId = userIdList.get(position);
-        holder.userIdTextView.setText(userId);
+
+        // Retrieve the name for the corresponding user ID from the database
+        usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String name = dataSnapshot.child("name").getValue(String.class);
+                    holder.userIdTextView.setText(name); // Set the name in the TextView
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle error
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {

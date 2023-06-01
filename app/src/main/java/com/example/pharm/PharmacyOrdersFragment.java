@@ -20,12 +20,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
 public class PharmacyOrdersFragment extends Fragment {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> userIdList;
     viewOrderAdapter adapter;
-    final private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Orders");
+    final private DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("Orders");
+    final private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
     public PharmacyOrdersFragment() {
         // Required empty public constructor
@@ -48,20 +50,34 @@ public class PharmacyOrdersFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         userIdList = new ArrayList<>();
-        adapter = new viewOrderAdapter(getActivity(), userIdList);
+        adapter = new viewOrderAdapter(getActivity(), userIdList, usersRef);
         recyclerView.setAdapter(adapter);
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ordersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userIdList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String userId = snapshot.child("user_id").getValue(String.class); // Retrieve the userId directly from the "user_id" field in the snapshot
-//                    Log.d("TAG", "ID: " + userId);
+                    String userId = snapshot.child("user_id").getValue(String.class);
 
-                    userIdList.add(userId);
+                    usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                String name = dataSnapshot.child("name").getValue(String.class);
+                                Log.d("TAG", "ID: " + userId);
+                                Log.d("TAG", "Name: " + name);
+                                userIdList.add(name);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle error
+                        }
+                    });
                 }
-                adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
 
