@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PharmacyOrdersFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -57,6 +58,9 @@ public class PharmacyOrdersFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userIdList.clear();
+                int expectedCallbacks = (int) dataSnapshot.getChildrenCount();
+                AtomicInteger callbacksCompleted = new AtomicInteger(0);
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String userId = snapshot.child("user_id").getValue(String.class);
 
@@ -68,22 +72,32 @@ public class PharmacyOrdersFragment extends Fragment {
                                 Log.d("TAG", "ID: " + userId);
                                 Log.d("TAG", "Name: " + name);
                                 userIdList.add(name);
+                            }
 
+                            int completed = callbacksCompleted.incrementAndGet();
+                            if (completed == expectedCallbacks) {
+                                dialog.dismiss();
+                                adapter.notifyDataSetChanged();
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Handle error
+                            int completed = callbacksCompleted.incrementAndGet();
+                            if (completed == expectedCallbacks) {
+                                dialog.dismiss();
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     });
                 }
-                dialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle error
+                dialog.dismiss();
             }
         });
 

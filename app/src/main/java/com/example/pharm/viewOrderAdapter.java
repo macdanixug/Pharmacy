@@ -32,7 +32,6 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
         this.usersRef = usersRef;
     }
 
-
     public void setOnItemClickListener(viewOrderAdapter.OnItemClickListener listener) {
         mListener = listener;
     }
@@ -46,7 +45,7 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewOrderAdapter.myViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final viewOrderAdapter.myViewHolder holder, int position) {
         String userId = userIdList.get(position);
 
         // Retrieve the name for the corresponding user ID from the database
@@ -66,23 +65,16 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
         });
     }
 
-
     @Override
     public int getItemCount() {
         return userIdList.size();
     }
 
     public static class myViewHolder extends RecyclerView.ViewHolder {
-        TextView productNameTextView;
-        TextView productQuantityTextView;
-        TextView productPriceTextView;
         TextView userIdTextView;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
-            productNameTextView = itemView.findViewById(R.id.productNameTextView);
-            productQuantityTextView = itemView.findViewById(R.id.productQuantityTextView);
-            productPriceTextView = itemView.findViewById(R.id.productPriceTextView);
             userIdTextView = itemView.findViewById(R.id.userIdTextView);
         }
     }
