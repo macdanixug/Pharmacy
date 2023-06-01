@@ -46,23 +46,11 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
 
     @Override
     public void onBindViewHolder(@NonNull final viewOrderAdapter.myViewHolder holder, int position) {
-        String userId = userIdList.get(position);
+        String name = userIdList.get(position);
+        holder.userIdTextView.setText(name);
 
-        // Retrieve the name for the corresponding user ID from the database
-        usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    String name = dataSnapshot.child("name").getValue(String.class);
-                    holder.userIdTextView.setText(name); // Set the name in the TextView
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle error
-            }
-        });
+        String date = userIdList.get(position);
+        holder.dateTime.setText(date);
     }
 
     @Override
@@ -71,11 +59,12 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
     }
 
     public static class myViewHolder extends RecyclerView.ViewHolder {
-        TextView userIdTextView;
+        TextView userIdTextView, dateTime;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             userIdTextView = itemView.findViewById(R.id.userIdTextView);
+            dateTime = itemView.findViewById(R.id.dateTime);
         }
     }
 }

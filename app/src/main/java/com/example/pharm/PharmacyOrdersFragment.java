@@ -63,6 +63,7 @@ public class PharmacyOrdersFragment extends Fragment {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String userId = snapshot.child("user_id").getValue(String.class);
+                    String date = snapshot.child("timestamp").getValue(String.class);
 
                     usersRef.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -71,6 +72,7 @@ public class PharmacyOrdersFragment extends Fragment {
                                 String name = dataSnapshot.child("name").getValue(String.class);
                                 Log.d("TAG", "ID: " + userId);
                                 Log.d("TAG", "Name: " + name);
+                                Log.d("TAG", "Timestamp: " + date);
                                 userIdList.add(name);
                             }
 
