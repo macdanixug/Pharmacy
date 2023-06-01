@@ -8,10 +8,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,15 +20,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-
 public class PharmacyOrdersFragment extends Fragment {
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    ArrayList<CartItem> list;
+    ArrayList<String> userIdList;
     viewOrderAdapter adapter;
     final private DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Orders");
 
@@ -36,13 +31,12 @@ public class PharmacyOrdersFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pharmacy_orders, container, false);
 
-        recyclerView= view.findViewById(R.id.products);
+        recyclerView = view.findViewById(R.id.products);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(false);
@@ -53,24 +47,22 @@ public class PharmacyOrdersFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        list= new ArrayList<>();
-        adapter = new viewOrderAdapter(getActivity(),list);
+        userIdList = new ArrayList<>();
+        adapter = new viewOrderAdapter(getActivity(), userIdList);
         recyclerView.setAdapter(adapter);
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list.clear();
-                // Retrieve data from dataSnapshot and add it to your RecyclerView adapter
+                userIdList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CartItem object = snapshot.getValue(CartItem.class);
-                    list.add(object);
+                    String userId = snapshot.child("user_id").getValue(String.class); // Retrieve the userId directly from the "user_id" field in the snapshot
+//                    Log.d("TAG", "ID: " + userId);
+
+                    userIdList.add(userId);
                 }
-
-                viewOrderAdapter adapter = new viewOrderAdapter(getActivity(), list);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
                 dialog.dismiss();
-
             }
 
             @Override

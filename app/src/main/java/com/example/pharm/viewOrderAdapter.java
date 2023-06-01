@@ -1,41 +1,31 @@
 package com.example.pharm;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myViewHolder> {
     private Context context;
-    private ArrayList<CartItem> list;
+    private ArrayList<String> userIdList;
     private viewOrderAdapter.OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        void onItemClick(CartItem item);
+        void onItemClick(String userId);
     }
 
-    public viewOrderAdapter(Context context, List<CartItem> list) {
+    public viewOrderAdapter(Context context, ArrayList<String> userIdList) {
         this.context = context;
-        this.list = (ArrayList<CartItem>) list;
+        this.userIdList = userIdList;
     }
-
 
     public void setOnItemClickListener(viewOrderAdapter.OnItemClickListener listener) {
         mListener = listener;
@@ -48,41 +38,30 @@ public class viewOrderAdapter extends RecyclerView.Adapter<viewOrderAdapter.myVi
                 .inflate(R.layout.view_order_design, parent, false);
         return new viewOrderAdapter.myViewHolder(v);
     }
+
     @Override
     public void onBindViewHolder(@NonNull viewOrderAdapter.myViewHolder holder, int position) {
-        CartItem model = list.get(position);
-        if (model != null) {
-            holder.productNameTextView.setText(model.getName());
-            holder.productQuantityTextView.setText(String.valueOf(model.getQuantity()));
-            holder.productPriceTextView.setText(String.valueOf(model.getPrice()));
-
-            Log.d("TAG", "Product Name: " + model.getName());
-            Log.d("TAG", "Price: " + model.getPrice());
-            Log.d("TAG", "Quantity: " + model.getQuantity());
-        } else {
-            // Handle the case when the model is null
-            Log.d("TAG", "Null model at position: " + position);
-        }
+        String userId = userIdList.get(position);
+        holder.userIdTextView.setText(userId);
     }
-
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return userIdList.size();
     }
 
     public static class myViewHolder extends RecyclerView.ViewHolder {
         TextView productNameTextView;
         TextView productQuantityTextView;
         TextView productPriceTextView;
+        TextView userIdTextView;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             productNameTextView = itemView.findViewById(R.id.productNameTextView);
             productQuantityTextView = itemView.findViewById(R.id.productQuantityTextView);
             productPriceTextView = itemView.findViewById(R.id.productPriceTextView);
-
+            userIdTextView = itemView.findViewById(R.id.userIdTextView);
         }
     }
-
 }
