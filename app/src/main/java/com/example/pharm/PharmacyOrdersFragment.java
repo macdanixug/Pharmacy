@@ -74,6 +74,7 @@ public class PharmacyOrdersFragment extends Fragment {
                                 Log.d("TAG", "Name: " + name);
                                 Log.d("TAG", "Timestamp: " + date);
                                 userIdList.add(name);
+                                userIdList.add(date);
                             }
 
                             int completed = callbacksCompleted.incrementAndGet();
