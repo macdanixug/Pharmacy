@@ -1,14 +1,18 @@
 package com.example.pharm;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PharmacyContacts extends AppCompatActivity {
     TextView whatsap, facebook, number, email, twitter;
@@ -34,11 +41,16 @@ public class PharmacyContacts extends AppCompatActivity {
         twitter = findViewById(R.id.twitter);
         email = findViewById(R.id.gmail);
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Loading Data");
+        builder.setMessage("Please wait......");
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
         // Retrieve the pharmacy name from the intent
         Intent retrieve = getIntent();
         String pharmacyName = retrieve.getStringExtra("pharmacy").trim();
-
-        Log.d("TAG", "Pharmacy Name: "+pharmacyName);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users");
         Query pharmaciesQuery = databaseReference.orderByChild("pharmacy").equalTo(pharmacyName);
@@ -61,8 +73,41 @@ public class PharmacyContacts extends AppCompatActivity {
                             number.setText(Phone);
                             twitter.setText(Twitter);
 
+                            dialog.dismiss();
+
                             email.setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
                             email.setMovementMethod(LinkMovementMethod.getInstance());
+                            whatsap.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String phoneNumber = pharmacy.getWhatsap();
+                                    String whatsappLink = "https://wa.me/" + phoneNumber;
+
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(whatsappLink));
+                                    PackageManager packageManager = getPackageManager();
+                                    if (intent.resolveActivity(packageManager) != null) {
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(PharmacyContacts.this, "No app found to handle the request", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+// Activate autolink for WhatsApp
+                            Pattern pattern = Pattern.compile("\\+?[0-9]+");
+                            Linkify.addLinks(whatsap, pattern, "https://wa.me/");
+                            whatsap.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
+                            facebook.setAutoLinkMask(Linkify.WEB_URLS);
+                            facebook.setMovementMethod(LinkMovementMethod.getInstance());
+
+                            number.setAutoLinkMask(Linkify.PHONE_NUMBERS);
+                            number.setMovementMethod(LinkMovementMethod.getInstance());
+
+                            twitter.setAutoLinkMask(Linkify.WEB_URLS);
+                            twitter.setMovementMethod(LinkMovementMethod.getInstance());
                         }
                     }
                 }
@@ -70,6 +115,7 @@ public class PharmacyContacts extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                dialog.dismiss();
             }
         });
     }

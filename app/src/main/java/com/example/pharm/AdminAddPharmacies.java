@@ -43,6 +43,10 @@ public class AdminAddPharmacies extends AppCompatActivity {
         twitter=findViewById(R.id.twitter);
         facebook=findViewById(R.id.facebook);
         create=findViewById(R.id.create);
+
+        String initialText = "2567";
+        whatsap.setText(initialText.substring(1));
+
         mAuth=FirebaseAuth.getInstance();
         
         create.setOnClickListener(new View.OnClickListener() {
