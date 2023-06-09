@@ -1,16 +1,19 @@
 package com.example.pharm;
 
 public class PharmacyRegistration {
-    String pharmacy, email, phone, address, role;
+    String pharmacy, email, phone, address,twitter,facebook,whatsap, role;
 
     public PharmacyRegistration() {
     }
 
-    public PharmacyRegistration(String pharmacy, String email, String phone, String address,String role) {
+    public PharmacyRegistration(String pharmacy, String email, String phone, String address, String twitter, String facebook, String whatsap, String role) {
         this.pharmacy = pharmacy;
         this.email = email;
         this.phone = phone;
         this.address = address;
+        this.twitter = twitter;
+        this.facebook = facebook;
+        this.whatsap = whatsap;
         this.role = role;
     }
 
@@ -44,6 +47,30 @@ public class PharmacyRegistration {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getWhatsap() {
+        return whatsap;
+    }
+
+    public void setWhatsap(String whatsap) {
+        this.whatsap = whatsap;
     }
 
     public String getRole() {

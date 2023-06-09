@@ -46,9 +46,12 @@ public class CustomerProductCart extends AppCompatActivity {
         contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CustomerProductCart.this, PharmacyContacts.class));
+                Intent intent = new Intent(CustomerProductCart.this, PharmacyContacts.class);
+                intent.putExtra("pharmacy", pharmacy.getText().toString());
+                startActivity(intent);
             }
         });
+
 
         check_cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +81,7 @@ public class CustomerProductCart extends AppCompatActivity {
 
         Intent retrieve = getIntent();
         String pharmacyName = retrieve.getStringExtra("pharmacy");
-        pharmacy.setText(pharmacyName+" pharmacy");
+        pharmacy.setText(pharmacyName);
         Query query = FirebaseDatabase.getInstance().getReference("drugs").orderByChild("pharmacy").equalTo(pharmacyName);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
