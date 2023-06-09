@@ -31,7 +31,7 @@ public class CustomerProductCart extends AppCompatActivity {
     private List<Drug> drugs;
     private ShoppingCartAdapter adapter;
     private FirebaseAuth mAuth;
-    private ImageView check_cart;
+    private ImageView check_cart,contactView;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,6 +41,15 @@ public class CustomerProductCart extends AppCompatActivity {
 
 //        Check Cart Icon ImageView
         check_cart=findViewById(R.id.check_cart);
+        contactView=findViewById(R.id.contactView);
+
+        contactView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CustomerProductCart.this, PharmacyContacts.class));
+            }
+        });
+
         check_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
