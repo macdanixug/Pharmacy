@@ -44,7 +44,7 @@ public class AdminAddPharmacies extends AppCompatActivity {
         facebook=findViewById(R.id.facebook);
         create=findViewById(R.id.create);
 
-        String initialText = "2567";
+        String initialText = "https://wa.me/2567";
         whatsap.setText(initialText.substring(1));
 
         mAuth=FirebaseAuth.getInstance();

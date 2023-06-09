@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,34 +73,84 @@ public class PharmacyContacts extends AppCompatActivity {
                             whatsap.setText(Whatsap);
                             facebook.setText(Facebook);
                             number.setText(Phone);
-                            twitter.setText(Twitter);
+                            twitter.setText("@"+Twitter);
 
                             dialog.dismiss();
 
-                            email.setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
-                            email.setMovementMethod(LinkMovementMethod.getInstance());
                             whatsap.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    String phoneNumber = pharmacy.getWhatsap();
-                                    String whatsappLink = "https://wa.me/" + phoneNumber;
+                                    String whatsapHandle = pharmacy.getTwitter();
+                                    if (whatsapHandle != null){
+                                        String phoneNumber = pharmacy.getWhatsap();
+                                        String whatsappLink = "https://wa.me/" + phoneNumber;
 
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(whatsappLink));
-                                    PackageManager packageManager = getPackageManager();
-                                    if (intent.resolveActivity(packageManager) != null) {
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(PharmacyContacts.this, "No app found to handle the request", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(whatsappLink));
+                                        PackageManager packageManager = getPackageManager();
+                                        if (intent.resolveActivity(packageManager) != null) {
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(PharmacyContacts.this, "No app found to handle the request", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    else {
+                                        whatsap.setText("Whatsapp Number");
                                     }
                                 }
                             });
 
-// Activate autolink for WhatsApp
                             Pattern pattern = Pattern.compile("\\+?[0-9]+");
                             Linkify.addLinks(whatsap, pattern, "https://wa.me/");
                             whatsap.setMovementMethod(LinkMovementMethod.getInstance());
 
+                            twitter.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String twitterHandle = pharmacy.getTwitter();
+                                    if (twitterHandle != null) {
+                                        try {
+                                            String encodedTwitterHandle = URLEncoder.encode(twitterHandle, "UTF-8");
+                                            String twitterLink = "https://twitter.com/" + encodedTwitterHandle;
 
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(twitterLink));
+                                            startActivity(intent);
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    else {
+                                        twitter.setText("Twitter Handle");
+                                    }
+
+                                }
+                            });
+
+                            facebook.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    String facebookHandle = pharmacy.getFacebook();
+                                    if (facebookHandle !=null){
+                                        try {
+                                            String encodedFacebookHandle = URLEncoder.encode(facebookHandle, "UTF-8");
+                                            String facebookLink = encodedFacebookHandle;
+
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookLink));
+                                            startActivity(intent);
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                    else{
+                                        facebook.setText("No facebook handle");
+                                    }
+                                }
+                            });
+
+                            email.setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
+                            email.setMovementMethod(LinkMovementMethod.getInstance());
+
+                            twitter.setAutoLinkMask(Linkify.WEB_URLS);
+                            twitter.setMovementMethod(LinkMovementMethod.getInstance());
 
                             facebook.setAutoLinkMask(Linkify.WEB_URLS);
                             facebook.setMovementMethod(LinkMovementMethod.getInstance());
@@ -106,8 +158,7 @@ public class PharmacyContacts extends AppCompatActivity {
                             number.setAutoLinkMask(Linkify.PHONE_NUMBERS);
                             number.setMovementMethod(LinkMovementMethod.getInstance());
 
-                            twitter.setAutoLinkMask(Linkify.WEB_URLS);
-                            twitter.setMovementMethod(LinkMovementMethod.getInstance());
+
                         }
                     }
                 }
