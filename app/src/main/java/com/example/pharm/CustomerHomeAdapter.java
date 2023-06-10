@@ -35,7 +35,7 @@ public class CustomerHomeAdapter extends RecyclerView.Adapter<CustomerHomeAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.name.setText(drugs.get(position).getName());
-        holder.description.setText(drugs.get(position).getDescription());
+        holder.description.setText("UGX Shs: "+drugs.get(position).getPrice());
 
         Picasso.get().load(drugs.get(position).getImageUrl()).into(holder.drug_image);
 
